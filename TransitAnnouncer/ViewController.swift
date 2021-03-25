@@ -12,6 +12,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+
+        if let metlinkApiKey = Bundle.main.infoDictionary?["METLINK_API_KEY"] as? String {
+            print(metlinkApiKey)
+        }
+
     }
 
 

@@ -15,6 +15,8 @@
 		A879EE81260D29DD00FF2CF2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A879EE7F260D29DD00FF2CF2 /* LaunchScreen.storyboard */; };
 		A879EE8C260D29DD00FF2CF2 /* TransitAnnouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EE8B260D29DD00FF2CF2 /* TransitAnnouncerTests.swift */; };
 		A879EE97260D29DD00FF2CF2 /* TransitAnnouncerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EE96260D29DD00FF2CF2 /* TransitAnnouncerUITests.swift */; };
+		A879EEA8260D2C6E00FF2CF2 /* stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EEA7260D2C6E00FF2CF2 /* stops.swift */; };
+		A879EEAC260D403000FF2CF2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A879EEAB260D403000FF2CF2 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,10 @@
 		A879EE92260D29DD00FF2CF2 /* TransitAnnouncerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TransitAnnouncerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A879EE96260D29DD00FF2CF2 /* TransitAnnouncerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitAnnouncerUITests.swift; sourceTree = "<group>"; };
 		A879EE98260D29DD00FF2CF2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A879EEA7260D2C6E00FF2CF2 /* stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stops.swift; sourceTree = "<group>"; };
+		A879EEA9260D3C7100FF2CF2 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		A879EEAA260D3CD600FF2CF2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		A879EEAB260D403000FF2CF2 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,7 @@
 		A879EE73260D29DC00FF2CF2 /* TransitAnnouncer */ = {
 			isa = PBXGroup;
 			children = (
+				A879EEA4260D2A9100FF2CF2 /* Model */,
 				A879EE74260D29DC00FF2CF2 /* AppDelegate.swift */,
 				A879EE76260D29DC00FF2CF2 /* SceneDelegate.swift */,
 				A879EE78260D29DC00FF2CF2 /* ViewController.swift */,
@@ -106,6 +113,9 @@
 				A879EE7D260D29DD00FF2CF2 /* Assets.xcassets */,
 				A879EE7F260D29DD00FF2CF2 /* LaunchScreen.storyboard */,
 				A879EE82260D29DD00FF2CF2 /* Info.plist */,
+				A879EEA9260D3C7100FF2CF2 /* Secrets.xcconfig */,
+				A879EEAA260D3CD600FF2CF2 /* Config.xcconfig */,
+				A879EEAB260D403000FF2CF2 /* Settings.bundle */,
 			);
 			path = TransitAnnouncer;
 			sourceTree = "<group>";
@@ -126,6 +136,22 @@
 				A879EE98260D29DD00FF2CF2 /* Info.plist */,
 			);
 			path = TransitAnnouncerUITests;
+			sourceTree = "<group>";
+		};
+		A879EEA4260D2A9100FF2CF2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A879EEA6260D2C5300FF2CF2 /* gtfs */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A879EEA6260D2C5300FF2CF2 /* gtfs */ = {
+			isa = PBXGroup;
+			children = (
+				A879EEA7260D2C6E00FF2CF2 /* stops.swift */,
+			);
+			path = gtfs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A879EEAC260D403000FF2CF2 /* Settings.bundle in Resources */,
 				A879EE81260D29DD00FF2CF2 /* LaunchScreen.storyboard in Resources */,
 				A879EE7E260D29DD00FF2CF2 /* Assets.xcassets in Resources */,
 				A879EE7C260D29DC00FF2CF2 /* Main.storyboard in Resources */,
@@ -261,6 +288,7 @@
 				A879EE79260D29DC00FF2CF2 /* ViewController.swift in Sources */,
 				A879EE75260D29DC00FF2CF2 /* AppDelegate.swift in Sources */,
 				A879EE77260D29DC00FF2CF2 /* SceneDelegate.swift in Sources */,
+				A879EEA8260D2C6E00FF2CF2 /* stops.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +345,7 @@
 /* Begin XCBuildConfiguration section */
 		A879EE99260D29DD00FF2CF2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A879EEAA260D3CD600FF2CF2 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -366,7 +395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -378,6 +407,7 @@
 		};
 		A879EE9A260D29DD00FF2CF2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A879EEAA260D3CD600FF2CF2 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -421,7 +451,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
