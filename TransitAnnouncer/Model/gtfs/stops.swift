@@ -32,6 +32,11 @@ struct Stop: Codable {
     }
 }
 
+struct StopWithDistance {
+    let stop: Stop
+    let distance: Int
+}
+
 enum ParentStation: String, Codable {
     case empty = ""
     case khan = "KHAN"
@@ -56,3 +61,4 @@ enum StopTimezone: String, Codable {
 }
 
 typealias Stops = [Stop]
+typealias StopsWithDistance = [StopWithDistance]

@@ -17,17 +17,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var map: MKMapView!
     
     var manager: CLLocationManager = CLLocationManager()
+    
+    var metlinkApiKey: String = ""
+    var metlinkGTFSStopsURL: String = ""
+    var stops: Stops = Stops()
+    var nearestStops: StopsWithDistance = StopsWithDistance()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 
         if let metlinkApiKey = Bundle.main.infoDictionary?["METLINK_API_KEY"] as? String {
-            print(metlinkApiKey)
+//            print(metlinkApiKey)
+            self.metlinkApiKey = metlinkApiKey
         }
 
         if let metlinkGTFSStopsURL = Bundle.main.infoDictionary?["METLINK_GTFS_STOPS_URL"] as? String {
-            print(metlinkGTFSStopsURL)
+//            print(metlinkGTFSStopsURL)
+            self.metlinkGTFSStopsURL = metlinkGTFSStopsURL
         }
         
         labelStatus.text="Locating..."
@@ -36,10 +43,86 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
         manager.startUpdatingHeading()
-
+        
+        loadStops()
     }
 
+    func loadStops(){
+        let url = URL(string: metlinkGTFSStopsURL)!
+        var request = URLRequest(url: url)
+                
+        request.addValue(
+            self.metlinkApiKey,
+            forHTTPHeaderField: "x-api-key"
+        )
+        
+        print("Loading stops...")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { (data, response, error) in
+
+            if let error = error {
+                // Handle HTTP request error
+                print("Error accessing \(self.metlinkGTFSStopsURL): \(error)")
+                return
+            } else if let data = data {
+                print("Loaded stops.")
+                // Handle HTTP request response
+                if let decodedResponse = try? JSONDecoder().decode(Stops.self, from: data) {
+                    // we have good data – go back to the main thread
+                    DispatchQueue.main.async {
+                        // update our UI
+                        print("Updating stops.")
+
+                        self.stops = decodedResponse
+                    }
+
+                    // everything is good, so we can exit
+                    return
+                }
+            } else {
+                // if we're still here it means there was a problem
+                print("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+        
+        task.resume()
+
+    }
     
+    func findNearestStops(){
+        let distanceCutOff = 1000
+        
+        labelStatus.text = "Finding nearest stops..."
+
+        if let location = self.manager.location{
+            
+            nearestStops.removeAll()
+            
+            for stop in stops{
+                let stopCoordinate = CLLocationCoordinate2D(latitude: stop.stopLat, longitude: stop.stopLon)
+                
+                let distanceMetres = Int(distance(a: location.coordinate, b: stopCoordinate))
+
+                if(distanceMetres<=distanceCutOff){
+                    nearestStops.append(StopWithDistance(stop: stop, distance: distanceMetres))
+                }
+            }
+            for stopWithDistance in nearestStops{
+                print("\(stopWithDistance.stop.stopCode) \(stopWithDistance.stop.stopName) \(stopWithDistance.distance)")
+            }
+
+            // Order
+            
+            let summary = "There's \(self.nearestStops.count) stops within \(distanceCutOff) metres."
+            print(summary)
+            labelStatus.text = summary
+
+
+        } else {
+
+        }
+    }
+
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         print(newHeading.trueHeading)
         
@@ -62,6 +145,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 //        map.setRegion(MKCoordinateRegion(center: last.coordinate, latitudinalMeters: 100, longitudinalMeters: 500), animated: true)
         map.setCenter(last.coordinate, animated: true)
         map.addAnnotation(pin)
+        
+        if(nearestStops.count == 0){
+            findNearestStops()
+        }
     }
 }
 
