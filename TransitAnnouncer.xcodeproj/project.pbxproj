@@ -17,6 +17,7 @@
 		A879EE97260D29DD00FF2CF2 /* TransitAnnouncerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EE96260D29DD00FF2CF2 /* TransitAnnouncerUITests.swift */; };
 		A879EEA8260D2C6E00FF2CF2 /* stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EEA7260D2C6E00FF2CF2 /* stops.swift */; };
 		A879EEAC260D403000FF2CF2 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A879EEAB260D403000FF2CF2 /* Settings.bundle */; };
+		A879EEAF260D475300FF2CF2 /* Distance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EEAE260D475300FF2CF2 /* Distance.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		A879EEA9260D3C7100FF2CF2 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A879EEAA260D3CD600FF2CF2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A879EEAB260D403000FF2CF2 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A879EEAE260D475300FF2CF2 /* Distance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Distance.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 		A879EE73260D29DC00FF2CF2 /* TransitAnnouncer */ = {
 			isa = PBXGroup;
 			children = (
+				A879EEAD260D474100FF2CF2 /* Helpers */,
 				A879EEA4260D2A9100FF2CF2 /* Model */,
 				A879EE74260D29DC00FF2CF2 /* AppDelegate.swift */,
 				A879EE76260D29DC00FF2CF2 /* SceneDelegate.swift */,
@@ -152,6 +155,14 @@
 				A879EEA7260D2C6E00FF2CF2 /* stops.swift */,
 			);
 			path = gtfs;
+			sourceTree = "<group>";
+		};
+		A879EEAD260D474100FF2CF2 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A879EEAE260D475300FF2CF2 /* Distance.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,6 +300,7 @@
 				A879EE75260D29DC00FF2CF2 /* AppDelegate.swift in Sources */,
 				A879EE77260D29DC00FF2CF2 /* SceneDelegate.swift in Sources */,
 				A879EEA8260D2C6E00FF2CF2 /* stops.swift in Sources */,
+				A879EEAF260D475300FF2CF2 /* Distance.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

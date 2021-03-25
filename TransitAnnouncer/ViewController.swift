@@ -17,6 +17,10 @@ class ViewController: UIViewController {
             print(metlinkApiKey)
         }
 
+        if let metlinkGTFSStopsURL = Bundle.main.infoDictionary?["METLINK_GTFS_STOPS_URL"] as? String {
+            print(metlinkGTFSStopsURL)
+        }
+
     }
 
 

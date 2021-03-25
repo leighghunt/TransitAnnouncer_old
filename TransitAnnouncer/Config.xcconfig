@@ -8,6 +8,7 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-//#include "Secrets.xcconfig"
+#include "Secrets.xcconfig"
 
-METLINK_API_KEY = Get API key from opendata.metlink.org.nz/dashboard
+METLINK_GTFS_STOPS_URL = https:/$()/api.opendata.metlink.org.nz/v1/gtfs/stops
+METLINK_API_KEY = $(inherited) //Get API key from https:/$()/opendata.metlink.org.nz/dashboard and store in Secrets.xcconfig
