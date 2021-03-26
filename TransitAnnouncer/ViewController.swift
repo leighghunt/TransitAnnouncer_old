@@ -14,10 +14,10 @@ import AVKit
 class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynthesizerDelegate {
 
     @IBOutlet weak var labelStatus: UILabel!
-    @IBOutlet weak var labelCoordinates: UILabel!
-    @IBOutlet weak var labelHeading: UILabel!
     @IBOutlet weak var map: MKMapView!
-    
+    @IBOutlet weak var labelNear: UILabel!
+    @IBOutlet weak var labelNearest: UILabel!
+
     var manager: CLLocationManager = CLLocationManager()
     var synth=AVSpeechSynthesizer()
 
@@ -26,6 +26,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
     var stops: Stops = Stops()
     var nearestStops: StopsWithDistance = StopsWithDistance()
     var prevNearestStop: Stop? = nil
+
+    let pinMe = MKPointAnnotation()
+    let pinNearestStop = MKPointAnnotation()
+    var mapZoomed = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +51,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
         manager.startUpdatingHeading()
+
+        map.mapType = .hybridFlyover
 
         synth.delegate = self
 
@@ -116,12 +122,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
                     nearestStops.append(StopWithDistance(stop: stop, distance: distanceMetres))
                 }
             }
+
+            nearestStops.sort(by: { $0.distance < $1.distance })
+
             for stopWithDistance in nearestStops{
-                print("\(stopWithDistance.stop.stopCode) \(stopWithDistance.stop.stopName) \(stopWithDistance.distance)")
+                print("\(stopWithDistance.stop.stopCode) \(stopWithDistance.stop.stopName) \(stopWithDistance.distance)m")
             }
 
-            // Order
-            if let nearestStop = nearestStops.sorted(by: { $0.distance < $1.distance }).first{
+            var stopCodes = ""
+            nearestStops.forEach{stop in
+                stopCodes += stop.stop.stopCode + ", "
+            }
+            
+            if(stopCodes.count>0){
+                stopCodes = String(stopCodes.prefix(stopCodes.count-1))
+            }
+
+            labelNear.text = stopCodes
+
+            if let nearestStop = nearestStops.first{
                 let summary = "There are \(self.nearestStops.count) stops within \(distanceCutOff) metres. \nNearest stop is \(nearestStop.stop.stopCode) \(nearestStop.stop.stopName) \nIt is \(nearestStop.distance) metres away."
                 print(summary)
                 labelStatus.text = summary
@@ -129,33 +148,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
                 var nearestStopChanged = false
                 if let prevNearestStopId = prevNearestStop?.stopID{
                     if(nearestStop.stop.stopID != prevNearestStopId){
-                        nearestStopChanged=true
+                        
+                        // Let's make sure we're at least a fair bit closer before we swap over.
+                        if(nearestStops.count == 1 || nearestStop.distance < Int(Double(nearestStops[1].distance) * 0.7)){
+                            nearestStopChanged=true
+                        }
+                        
                     }
                 } else {
+                    // First time we've found a nearest stop
                     nearestStopChanged=true
+                    map.addAnnotation(pinNearestStop)
                 }
                 
                 if(nearestStopChanged){
                     prevNearestStop = nearestStop.stop
-                    
-//                    print(nearestStop.stop.stopCode)
+                    pinNearestStop.coordinate = CLLocationCoordinate2DMake(nearestStop.stop.stopLat, nearestStop.stop.stopLon)
+
                     print(nearestStop.stop.stopName)
-//                    print(nearestStop.stop.stopDesc)
-//                    print(nearestStop.stop.stopID)
-//                    print(nearestStop.stop.locationType)
-                    
-//                    try? AVAudioSession.sharedInstance().setActive(true)
 
                     let utterance = AVSpeechUtterance(string:"Nearest stop is now \(nearestStop.stop.stopCode) \(nearestStop.stop.stopName)")
-//                    utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-//                    utterance.
+                    labelNearest.text = "\(nearestStop.stop.stopCode) \(nearestStop.stop.stopName)"
                     synth.speak(utterance)
-
                 }
             }
-            
-
-
         } else {
 
         }
@@ -171,29 +187,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         print(newHeading.trueHeading)
         
-        labelHeading.text = String(Int(newHeading.trueHeading))
+//        labelHeading.text = String(Int(newHeading.trueHeading))
 
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let last = locations.last else{
-            labelCoordinates.text = "Nope"
+//            labelCoordinates.text = "Nope"
             return
         }
         
         labelStatus.text="Located"
         
-        labelCoordinates.text = "\(last.coordinate.longitude) | \(last.coordinate.latitude)"
-        let pin = MKPointAnnotation()
-        pin.coordinate = last.coordinate
-
-//        map.setRegion(MKCoordinateRegion(center: last.coordinate, latitudinalMeters: 100, longitudinalMeters: 500), animated: true)
-        map.setCenter(last.coordinate, animated: true)
-        map.addAnnotation(pin)
+//        labelCoordinates.text = "\(last.coordinate.longitude) | \(last.coordinate.latitude)"
         
-//        if(nearestStops.count == 0){
+        pinMe.coordinate = last.coordinate
+
+        if(!mapZoomed){
+            mapZoomed=true
+            map.setRegion(MKCoordinateRegion(center: last.coordinate, latitudinalMeters: 100, longitudinalMeters: 100), animated: true)
+    //        map.setCenter(last.coordinate, animated: true)
+            map.addAnnotation(pinMe)
+        }
+
         findNearestStops()
-//        }
     }
 }
 
