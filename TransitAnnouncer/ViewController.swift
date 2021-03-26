@@ -8,8 +8,10 @@
 import UIKit
 import CoreLocation
 import MapKit
+import Speech
+import AVKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynthesizerDelegate {
 
     @IBOutlet weak var labelStatus: UILabel!
     @IBOutlet weak var labelCoordinates: UILabel!
@@ -17,11 +19,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var map: MKMapView!
     
     var manager: CLLocationManager = CLLocationManager()
-    
+    var synth=AVSpeechSynthesizer()
+
     var metlinkApiKey: String = ""
     var metlinkGTFSStopsURL: String = ""
     var stops: Stops = Stops()
     var nearestStops: StopsWithDistance = StopsWithDistance()
+    var prevNearestStop: Stop? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +47,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
         manager.startUpdatingHeading()
+
+        synth.delegate = self
+
+        // Allow other sounds to carry on
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: [.duckOthers, .interruptSpokenAudioAndMixWithOthers /*.interruptSpokenAudioAndMixWithOthers*/ /*.mixWithOthers*/])
         
         loadStops()
     }
@@ -116,6 +125,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 let summary = "There are \(self.nearestStops.count) stops within \(distanceCutOff) metres. \nNearest stop is \(nearestStop.stop.stopCode) \(nearestStop.stop.stopName) \nIt is \(nearestStop.distance) metres away."
                 print(summary)
                 labelStatus.text = summary
+                
+                var nearestStopChanged = false
+                if let prevNearestStopId = prevNearestStop?.stopID{
+                    if(nearestStop.stop.stopID != prevNearestStopId){
+                        nearestStopChanged=true
+                    }
+                } else {
+                    nearestStopChanged=true
+                }
+                
+                if(nearestStopChanged){
+                    prevNearestStop = nearestStop.stop
+                    
+//                    print(nearestStop.stop.stopCode)
+                    print(nearestStop.stop.stopName)
+//                    print(nearestStop.stop.stopDesc)
+//                    print(nearestStop.stop.stopID)
+//                    print(nearestStop.stop.locationType)
+                    
+//                    try? AVAudioSession.sharedInstance().setActive(true)
+
+                    let utterance = AVSpeechUtterance(string:"Nearest stop is now \(nearestStop.stop.stopCode) \(nearestStop.stop.stopName)")
+//                    utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
+//                    utterance.
+                    synth.speak(utterance)
+
+                }
             }
             
 
@@ -123,6 +159,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         } else {
 
         }
+    }
+        
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        guard !synthesizer.isSpeaking else { return }
+
+        let audioSession = AVAudioSession.sharedInstance()
+        try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
