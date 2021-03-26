@@ -215,7 +215,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
                 print("Loaded stop predictions.")
                 // Handle HTTP request response
                 do{
-                    let decodedResponse = try JSONDecoder().decode(StopPredictions.self, from: data)
+                    let jsonDecoder = JSONDecoder()
+                    jsonDecoder.dateDecodingStrategy = JSONDecoder.DateDecodingStrategy.iso8601
+                    let decodedResponse = try jsonDecoder.decode(StopPredictions.self, from: data)
                         // we have good data – go back to the main thread
                         DispatchQueue.main.async {
                             // update our UI
@@ -228,6 +230,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
                         return
                     
                 } catch let jsonError as NSError {
+                    print(jsonError as Any)
                     print("JSON decode failed: \(jsonError.localizedDescription)")
                 }
             } else {
