@@ -90,7 +90,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func findNearestStops(){
-        let distanceCutOff = 1000
+        let distanceCutOff = 100
         
         labelStatus.text = "Finding nearest stops..."
 
@@ -112,10 +112,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             }
 
             // Order
+            if let nearestStop = nearestStops.sorted(by: { $0.distance < $1.distance }).first{
+                let summary = "There are \(self.nearestStops.count) stops within \(distanceCutOff) metres. \nNearest stop is \(nearestStop.stop.stopCode) \(nearestStop.stop.stopName) \nIt is \(nearestStop.distance) metres away."
+                print(summary)
+                labelStatus.text = summary
+            }
             
-            let summary = "There's \(self.nearestStops.count) stops within \(distanceCutOff) metres."
-            print(summary)
-            labelStatus.text = summary
 
 
         } else {
@@ -146,9 +148,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         map.setCenter(last.coordinate, animated: true)
         map.addAnnotation(pin)
         
-        if(nearestStops.count == 0){
-            findNearestStops()
-        }
+//        if(nearestStops.count == 0){
+        findNearestStops()
+//        }
     }
 }
 
