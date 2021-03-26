@@ -24,21 +24,21 @@ struct Departure: Codable {
     let monitored, wheelchairAccessible: Bool
 
     enum CodingKeys: String, CodingKey {
-        case stopID
-        case serviceID
+        case stopID = "stop_id"
+        case serviceID = "service_id"
         case direction
-        case departureOperator
+        case departureOperator = "operator"
         case origin, destination, delay
-        case vehicleID
+        case vehicleID = "vehicle_id"
         case name, arrival, departure, status, monitored
-        case wheelchairAccessible
+        case wheelchairAccessible = "wheelchair_accessible"
     }
 }
 
 // MARK: - Arrival
 struct Arrival: Codable {
     let aimed: Date
-    let expected: Date?
+    let expected: String?
 }
 
 // MARK: - Destination
@@ -46,7 +46,7 @@ struct Destination: Codable {
     let stopID, name: String
 
     enum CodingKeys: String, CodingKey {
-        case stopID
+        case stopID = "stop_id"
         case name
     }
 }

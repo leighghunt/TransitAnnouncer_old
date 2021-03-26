@@ -224,6 +224,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
                             print("Updating stop predictions.")
 
                             self.stopPredictions = decodedResponse
+                            print(decodedResponse.departures[0])
                         }
 
                         // everything is good, so we can exit
