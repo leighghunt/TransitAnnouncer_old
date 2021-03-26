@@ -38,7 +38,7 @@ struct Departure: Codable {
 // MARK: - Arrival
 struct Arrival: Codable {
     let aimed: Date
-    let expected: String?
+    let expected: Date?
 }
 
 // MARK: - Destination

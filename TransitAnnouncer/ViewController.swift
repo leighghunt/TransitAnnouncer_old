@@ -174,12 +174,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
 
                     print(nearestStop.stop.stopName)
 
-                    let utterance = AVSpeechUtterance(string:"Nearest stop is now \(nearestStop.stop.stopName)")
+                    let utterance = AVSpeechUtterance(string:"Nearest stop is \(nearestStop.stop.stopName)")
                     labelNearest.text = "\(nearestStop.stop.stopCode) \(nearestStop.stop.stopName)"
                     synth.speak(utterance)
 
                     loadStopPredictions(stop_id: nearestStop.stop.stopCode)
-                    
+//                    loadStopPredictions(stop_id: "PORI")
+
                 }
             }
         } else {
@@ -224,7 +225,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
                             print("Updating stop predictions.")
 
                             self.stopPredictions = decodedResponse
-                            print(decodedResponse.departures[0])
+//                            print(decodedResponse.departures[0])
+                            self.announceNextArrivals()
                         }
 
                         // everything is good, so we can exit
@@ -243,6 +245,56 @@ class ViewController: UIViewController, CLLocationManagerDelegate, AVSpeechSynth
         task.resume()
     }
         
+    func announceNextArrivals(){
+        let timeInTenMinutes = Date.init(timeIntervalSinceNow: 600)
+        var message = ""
+        if let arrivalsInNextTenMinutes = self.stopPredictions?.departures.filter({departure in
+            departure.arrival.expected ?? departure.arrival.aimed < timeInTenMinutes
+        }){
+            print(arrivalsInNextTenMinutes.count)
+            if(arrivalsInNextTenMinutes.count == 0){
+                message = "No departures scheduled in next 10 minutes. "
+            }
+            
+//            let nextArrival = arrivalsInNextTenMinutes[0]
+            if let nextArrival = self.stopPredictions?.departures.first{
+                print (nextArrival)
+                let timeUnitNextArrivalMins = Int((nextArrival.arrival.expected ?? nextArrival.arrival.aimed).timeIntervalSinceNow/60)
+                message += "Next departure in \(timeUnitNextArrivalMins) minutes, "
+                message += "leaving from \(stopIdToName(nextArrival.origin.stopID)) to \(stopIdToName(nextArrival.destination.stopID)) "
+                message += "\(delayToText(nextArrival.delay)) "
+            }
+        }
+        
+        let utterance = AVSpeechUtterance(string:message)
+        synth.speak(utterance)
+        print (message)
+
+    }
+    
+    func stopIdToName(_ stopId: String) -> String {
+        if let stop = stops.first(where: { $0.stopID == stopId}){
+            return stop.stopName
+        } else {
+            return stopId
+        }
+    }
+    
+    func delayToText(_ delay: String) -> String {
+        if(delay=="PT0S"){
+            return ""
+        }
+
+//        Examples:
+//        PT14M40S 14m 40s
+        
+        if(delay.prefix(1) == "-"){
+            return " running early " + delay
+        }
+
+        return " delayed " + delay
+    }
+    
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         guard !synthesizer.isSpeaking else { return }
 
