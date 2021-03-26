@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A83ED15E260DDDBF0067CD35 /* stopPredictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83ED15D260DDDBF0067CD35 /* stopPredictions.swift */; };
 		A879EE75260D29DC00FF2CF2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EE74260D29DC00FF2CF2 /* AppDelegate.swift */; };
 		A879EE77260D29DC00FF2CF2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EE76260D29DC00FF2CF2 /* SceneDelegate.swift */; };
 		A879EE79260D29DC00FF2CF2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A879EE78260D29DC00FF2CF2 /* ViewController.swift */; };
@@ -38,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A83ED15D260DDDBF0067CD35 /* stopPredictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stopPredictions.swift; sourceTree = "<group>"; };
+		A83ED15F260DECAD0067CD35 /* 2021-03-26 0809.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "2021-03-26 0809.gpx"; path = "../../../Downloads/2021-03-26 0809.gpx"; sourceTree = "<group>"; };
 		A879EE71260D29DC00FF2CF2 /* TransitAnnouncer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransitAnnouncer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A879EE74260D29DC00FF2CF2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A879EE76260D29DC00FF2CF2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 		A879EE68260D29DC00FF2CF2 = {
 			isa = PBXGroup;
 			children = (
+				A83ED15F260DECAD0067CD35 /* 2021-03-26 0809.gpx */,
 				A879EE73260D29DC00FF2CF2 /* TransitAnnouncer */,
 				A879EE8A260D29DD00FF2CF2 /* TransitAnnouncerTests */,
 				A879EE95260D29DD00FF2CF2 /* TransitAnnouncerUITests */,
@@ -153,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				A879EEA7260D2C6E00FF2CF2 /* stops.swift */,
+				A83ED15D260DDDBF0067CD35 /* stopPredictions.swift */,
 			);
 			path = gtfs;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A83ED15E260DDDBF0067CD35 /* stopPredictions.swift in Sources */,
 				A879EE79260D29DC00FF2CF2 /* ViewController.swift in Sources */,
 				A879EE75260D29DC00FF2CF2 /* AppDelegate.swift in Sources */,
 				A879EE77260D29DC00FF2CF2 /* SceneDelegate.swift in Sources */,

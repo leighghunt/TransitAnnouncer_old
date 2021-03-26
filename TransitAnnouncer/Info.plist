@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>METLINK_GTFS_STOP_PREDICTION_URL</key>
+	<string>$(METLINK_GTFS_STOP_PREDICTION_URL)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We use your device&apos;s location to find the nearest transit stops</string>
 	<key>METLINK_API_KEY</key>
